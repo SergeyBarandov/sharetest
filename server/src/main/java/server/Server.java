@@ -1,40 +1,53 @@
 package server;
 
-import config.Settings;
+import client.ClientThread;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class Server {
-    private ServerSocket socketListener;
-    private boolean stopServer;
+    private static final int PORT = 5431;
+    private static final String NAME_SERVER = "Plot";
+    private final ThreadGroup group;
+
+    private boolean isStop;
+    private ServerSocket serverSocket;
+    private Socket clientSocket;
 
     public Server() {
+        this.group = new ThreadGroup("Clients");
     }
 
     public void start() {
         try {
-            this.socketListener = new ServerSocket(Integer.parseInt(Settings.PORT.get()));
-            while (!stopServer) {
-                Socket client = null;
-                while (client == null) {
-                    client = socketListener.accept();
-                }
-                //new ClientThread(client); //Создаем новый поток, которому передаем сокет
+            this.serverSocket = new ServerSocket(PORT);
+            System.out.printf("Server %s is start.%s", NAME_SERVER, System.lineSeparator());
+            while (!this.isStop) {
+                this.clientSocket = serverSocket.accept();
+                new Thread(new ClientThread(this.clientSocket));
             }
-        } catch (SocketException e) {
-            System.err.println("Socket exception");
-            e.printStackTrace();
         } catch (IOException e) {
-            System.err.println("I/O exception");
-            e.printStackTrace();
+            System.out.println("ERROR: The port or socket incorrect...");
         }
+        stopServer();
+        System.out.printf("Server %s is stop.", NAME_SERVER);
     }
 
+
+    /**
+     * Метод останавливает сервер, освобождая соккеты.
+     */
     private void stopServer() {
-        this.socketListener = null;
-        this.stopServer = true;
+        try {
+            if (this.serverSocket != null) {
+                this.serverSocket.close();
+            }
+            if (this.clientSocket != null) {
+                this.clientSocket.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
