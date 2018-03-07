@@ -1,0 +1,75 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient;
+
+type
+  TForm1 = class(TForm)
+    Memo1: TMemo;
+    ed_str: TEdit;
+    Button1: TButton;
+    ed_ip: TEdit;
+    Ed_port: TEdit;
+    IdTCPClient1: TIdTCPClient;
+    bt_connect: TButton;
+    bt_disconnect: TButton;
+    procedure Button1Click(Sender: TObject);
+    procedure IdTCPClient1Connected(Sender: TObject);
+    procedure IdTCPClient1Status(ASender: TObject; const AStatus: TIdStatus;
+      const AStatusText: string);
+    procedure bt_connectClick(Sender: TObject);
+    procedure IdTCPClient1Disconnected(Sender: TObject);
+    procedure bt_disconnectClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+procedure TForm1.bt_connectClick(Sender: TObject);
+begin
+IdTCPClient1.Host:=ed_ip.Text;
+IdTCPClient1.Port:=strtoint(Ed_port.Text);
+IdTCPClient1.Connect;
+end;
+
+procedure TForm1.bt_disconnectClick(Sender: TObject);
+begin
+IdTCPClient1.Disconnect;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+if IdTCPClient1.Connected then
+IdTCPClient1.(ed_str.Text)
+else ShowMessage('Not connected');
+end;
+
+procedure TForm1.IdTCPClient1Connected(Sender: TObject);
+begin
+Memo1.Lines.Add('Connected');
+end;
+
+procedure TForm1.IdTCPClient1Disconnected(Sender: TObject);
+begin
+Memo1.Lines.Add('Disconnect');
+end;
+
+procedure TForm1.IdTCPClient1Status(ASender: TObject; const AStatus: TIdStatus;
+  const AStatusText: string);
+begin
+Memo1.Lines.Add('Status: '+ AStatusText);
+end;
+
+end.
