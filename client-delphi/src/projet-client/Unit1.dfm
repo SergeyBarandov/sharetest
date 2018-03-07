@@ -80,6 +80,7 @@ object Form1: TForm1
     OnDisconnect = ClientSocket1Disconnect
     OnRead = ClientSocket1Read
     OnWrite = ClientSocket1Write
+    OnError = ClientSocket1Error
     Left = 24
     Top = 120
   end

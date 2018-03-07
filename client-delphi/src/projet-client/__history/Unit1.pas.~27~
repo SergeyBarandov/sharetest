@@ -29,8 +29,6 @@ type
     procedure ClientSocket1Write(Sender: TObject; Socket: TCustomWinSocket);
     procedure ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
     procedure bt_disconnectClick(Sender: TObject);
-    procedure ClientSocket1Error(Sender: TObject; Socket: TCustomWinSocket;
-      ErrorEvent: TErrorEvent; var ErrorCode: Integer);
   private
     { Private declarations }
   public
@@ -42,7 +40,7 @@ var
 implementation
 
 {$R *.dfm}
- {$I-}
+
 procedure TForm1.bt_connectClick(Sender: TObject);
 begin
 ClientSocket1.host:=ed_ip.Text;
@@ -79,13 +77,6 @@ procedure TForm1.ClientSocket1Disconnect(Sender: TObject;
   Socket: TCustomWinSocket);
 begin
 Memo1.Lines.Add('Disconnect');
-
-end;
-
-procedure TForm1.ClientSocket1Error(Sender: TObject; Socket: TCustomWinSocket;
-  ErrorEvent: TErrorEvent; var ErrorCode: Integer);
-begin
-memo1.Lines.Add('error: '+ inttostr(ErrorCode));
 end;
 
 procedure TForm1.ClientSocket1Read(Sender: TObject; Socket: TCustomWinSocket);
