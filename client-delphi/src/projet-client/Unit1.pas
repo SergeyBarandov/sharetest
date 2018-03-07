@@ -3,9 +3,8 @@ unit Unit1;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
-  System.Win.ScktComp;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  System.Win.ScktComp, Vcl.StdCtrls, Vcl.Controls, Vcl.Forms,Vcl.dialogs;
 
 type
   TForm1 = class(TForm)
@@ -17,6 +16,7 @@ type
     bt_connect: TButton;
     bt_disconnect: TButton;
     ClientSocket1: TClientSocket;
+    Button2: TButton;
 
     procedure Button1Click(Sender: TObject);
 
@@ -31,6 +31,7 @@ type
     procedure bt_disconnectClick(Sender: TObject);
     procedure ClientSocket1Error(Sender: TObject; Socket: TCustomWinSocket;
       ErrorEvent: TErrorEvent; var ErrorCode: Integer);
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -42,7 +43,7 @@ var
 implementation
 
 {$R *.dfm}
- {$I-}
+{$I-}
 procedure TForm1.bt_connectClick(Sender: TObject);
 begin
 ClientSocket1.host:=ed_ip.Text;
@@ -57,11 +58,25 @@ end;
 
 procedure TForm1.Button1Click(Sender: TObject);
 begin
-if ClientSocket1.Active then
-ClientSocket1.Socket.SendText(ed_str.Text)
+if ClientSocket1.Active then begin
+ClientSocket1.Socket.SendText(ed_str.Text+#10+#13);
+ClientSocket1.Socket.SendText(#13);
+end
 else ShowMessage('Not connected');
 end;
 
+
+procedure TForm1.Button2Click(Sender: TObject);
+var strbuff: string;
+begin
+if ClientSocket1.Active then
+begin
+  strbuff:=ed_str.Text;
+ ClientSocket1.Socket.SendBuf(strbuff,sizeof(strbuff));
+end
+else ShowMessage('Not connected');
+
+end;
 
 procedure TForm1.ClientSocket1Connect(Sender: TObject;
   Socket: TCustomWinSocket);

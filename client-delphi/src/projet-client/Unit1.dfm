@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'Client'
-  ClientHeight = 258
+  ClientHeight = 336
   ClientWidth = 263
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,9 +15,9 @@ object Form1: TForm1
   TextHeight = 13
   object Memo1: TMemo
     Left = 8
-    Top = 99
+    Top = 130
     Width = 249
-    Height = 150
+    Height = 199
     TabOrder = 0
   end
   object ed_str: TEdit
@@ -71,6 +71,15 @@ object Form1: TForm1
     TabOrder = 6
     OnClick = bt_disconnectClick
   end
+  object Button2: TButton
+    Left = 168
+    Top = 99
+    Width = 89
+    Height = 25
+    Caption = 'Send buff'
+    TabOrder = 7
+    OnClick = Button2Click
+  end
   object ClientSocket1: TClientSocket
     Active = False
     ClientType = ctNonBlocking
@@ -82,6 +91,6 @@ object Form1: TForm1
     OnWrite = ClientSocket1Write
     OnError = ClientSocket1Error
     Left = 24
-    Top = 120
+    Top = 144
   end
 end
